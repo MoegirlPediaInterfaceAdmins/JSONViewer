@@ -33,3 +33,22 @@ updates:
       npm:
         patterns:
           - "*"
+    # 主版本升级改由人工评估，先让 dependabot 拦下：
+    # typescript 7.x 与 @typescript-eslint 的 peer 范围（>=4.8.4 <6.1.0）不兼容，会让 eslint 门禁崩溃；
+    # react 与类型定义的主版本受 @preact/compat 别名方案约束，需要先确认兼容再手动升级。
+    ignore:
+      - dependency-name: typescript
+        update-types:
+          - version-update:semver-major
+      - dependency-name: react
+        update-types:
+          - version-update:semver-major
+      - dependency-name: react-dom
+        update-types:
+          - version-update:semver-major
+      - dependency-name: "@types/react"
+        update-types:
+          - version-update:semver-major
+      - dependency-name: "@types/react-dom"
+        update-types:
+          - version-update:semver-major
