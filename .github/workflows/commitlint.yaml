@@ -1,0 +1,51 @@
+name: commit lint
+
+# 独立于 CI（本仓库无本地钩子，CI 侧是唯一防线）：
+# PR 标题只在 squash 合并中进入历史，push 事件则逐条校验区间提交。
+on:
+  push:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+
+permissions:
+  contents: read
+
+jobs:
+  commitLint:
+    # edited 只在改动标题时才需要检查（只改正文时不应为此重跑整套依赖安装）。
+    if: github.event_name != 'pull_request' || github.event.action != 'edited' || github.event.changes.title != null
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # push 事件要按 github.event.before..HEAD 区间取提交，需要完整历史
+          fetch-depth: 0
+          show-progress: false
+      - name: Use Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+      - name: Installing the dependencies
+        run: npm ci
+      - name: Check commit messages
+        # 只改标题/正文不会改变提交列表，无需重查。
+        if: github.event_name == 'push'
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          # 首推/强推时 before 可能全零或不可达，回退为只查 HEAD 单条
+          if git cat-file -e "$BEFORE" 2>/dev/null; then
+            git log --format=%B -z "$BEFORE..HEAD" | npx commitlint
+          else
+            git log --format=%B -z -n 1 HEAD | npx commitlint
+          fi
+      - name: Check pull request title
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: echo "$PR_TITLE" | npx commitlint
