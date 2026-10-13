@@ -1,0 +1,48 @@
+extends: stylelint-config-standard
+
+reportDescriptionlessDisables: true
+
+reportInvalidScopeDisables: true
+
+reportNeedlessDisables: true
+
+# 产物 dist/Gadget-JSONViewer.css 会覆盖到界面代码库，必须被检查，故不忽略 dist；
+# 规则集与 MoegirlPediaInterfaceCodes / Navigation_popups 的 stylelint 配置保持一致。
+
+plugins:
+  - stylelint-plugin-use-baseline
+
+rules:
+  selector-id-pattern: null
+  selector-class-pattern: null
+  no-descending-specificity: null
+  number-max-precision: null
+  selector-no-vendor-prefix: null
+  value-no-vendor-prefix: null
+  at-rule-no-vendor-prefix: null
+  media-feature-name-no-vendor-prefix: null
+  property-no-vendor-prefix: null
+  selector-attribute-quotes: null
+  function-no-unknown:
+    - true
+    - ignoreFunctions:
+        - alpha
+  comment-empty-line-before: null
+  selector-type-no-unknown:
+    - true
+    - ignoreTypes:
+        - ogvjs
+        - rb
+        - moe-badges
+        - moe-badge
+  no-duplicate-selectors: null
+  declaration-property-value-no-unknown: true
+  plugin/use-baseline:
+    - true
+    - severity: warning
+      available: newly
+      ignoreProperties:
+        user-select:
+          - /^(?:auto|text|none|all)$/
+        resize:
+          - /^(?:none|both|horizontal|vertical|block|inline)$/

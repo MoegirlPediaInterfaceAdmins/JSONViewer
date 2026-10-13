@@ -1,0 +1,50 @@
+{
+    "name": "gadget-jsonviewer",
+    "version": "1.0.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/MoegirlPediaInterfaceAdmins/JSONViewer.git"
+    },
+    "type": "module",
+    "private": true,
+    "engines": {
+        "node": "^24.11"
+    },
+    "scripts": {
+        "build": "node scripts/build.ts",
+        "dev": "node scripts/build.ts --watch",
+        "typecheck": "tsc -p tsconfig.json",
+        "lint": "eslint . --max-warnings 0",
+        "lint:css": "stylelint \"src/**/*.css\" \"dist/*.css\" --max-warnings 0 --color",
+        "test:unit": "vitest run",
+        "test:idempotent": "node scripts/build.ts --check-idempotent",
+        "test": "npm run build && npm run typecheck && npm run lint && npm run lint:css && npm run test:unit && npm run test:idempotent"
+    },
+    "devDependencies": {
+        "@annangela/eslint-config": "^15.0.0",
+        "@commitlint/cli": "^21.2.3",
+        "@commitlint/config-conventional": "^21.2.2",
+        "@types/node": "^24.0.0",
+        "@types/react": "^18.3.31",
+        "@types/react-dom": "^18.3.7",
+        "autoprefixer": "^10.6.1",
+        "esbuild": "^0.28.2",
+        "eslint": "^10.11.0",
+        "jsdom": "^30.1.1",
+        "postcss": "^8.5.30",
+        "preact": "^11.0.0",
+        "react": "npm:@preact/compat@^18.3.2",
+        "react-dom": "npm:@preact/compat@^18.3.2",
+        "react18-json-view": "^0.2.10",
+        "stylelint": "^17.16.0",
+        "stylelint-config-standard": "^40.0.0",
+        "stylelint-plugin-use-baseline": "^1.4.7",
+        "types-mediawiki": "^2.1.0",
+        "types-mediawiki-response": "^1.1.0",
+        "typescript": "^5.9.3",
+        "vitest": "^5.0.3"
+    },
+    "allowScripts": {
+        "esbuild@0.28.2": true
+    }
+}
